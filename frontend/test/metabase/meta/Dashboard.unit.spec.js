@@ -486,7 +486,7 @@ describe("meta/Dashboard", () => {
                 name: "boolean",
                 semantic_type: null,
               }),
-              field_id: ["field", "boolean", { "base-type": "type/Boolean" }],
+              field_id: "boolean",
               mappingsWithValues: 0,
               parameter_id: "parameter1",
               target: [

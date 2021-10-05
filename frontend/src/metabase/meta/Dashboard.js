@@ -289,9 +289,16 @@ export function getMappingsByParameter(metadata, dashboard) {
         card && getParameterTargetFieldId(mapping.target, card.dataset_query);
       let field = metadata.field(fieldId);
 
+      // FIXME: virtual field IDs are field ref clauses like ['field', "FIELD_ID", {...}]
+      // However, for parameter mappings we need to use string "FIELD_ID"
+      const isVirtualFieldId =
+        Array.isArray(fieldId) && typeof fieldId[1] === "string";
+      const fieldIdOrName = isVirtualFieldId ? fieldId[1] : fieldId;
+
       if (!field) {
+        // Nested field IDs are field ref clauses
         const rawField = _.findWhere(dashcard.card.result_metadata, {
-          name: fieldId,
+          name: fieldIdOrName,
         });
 
         field = rawField && new Field(rawField, metadata);
@@ -312,7 +319,7 @@ export function getMappingsByParameter(metadata, dashboard) {
         parameter_id: mapping.parameter_id,
         dashcard_id: dashcard.id,
         card_id: mapping.card_id,
-        field_id: fieldId,
+        field_id: fieldIdOrName,
         field,
         values,
       };
